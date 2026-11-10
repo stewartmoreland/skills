@@ -1,0 +1,44 @@
+{
+  "initial": "idle",
+  "states": [
+    {
+      "name": "idle",
+      "type": "PlaybackState",
+      "animation": "main",
+      "autoplay": false,
+      "transitions": [
+        {
+          "type": "Transition",
+          "toState": "playing",
+          "guards": [
+            { "type": "Event", "inputName": "onHover" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "playing",
+      "type": "PlaybackState",
+      "animation": "main",
+      "autoplay": true,
+      "loop": true,
+      "transitions": [
+        {
+          "type": "Transition",
+          "toState": "idle",
+          "guards": [
+            { "type": "Event", "inputName": "onUnhover" }
+          ]
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    { "type": "PointerEnter", "actions": [{ "type": "Fire", "inputName": "onHover" }] },
+    { "type": "PointerExit",  "actions": [{ "type": "Fire", "inputName": "onUnhover" }] }
+  ],
+  "inputs": [
+    { "type": "Event", "name": "onHover" },
+    { "type": "Event", "name": "onUnhover" }
+  ]
+}

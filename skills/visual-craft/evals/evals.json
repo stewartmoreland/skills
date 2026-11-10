@@ -1,0 +1,83 @@
+{
+  "skill_name": "visual-craft",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "The ServicesIntro cover scene feels flat and kind of cheap right now. Can you make it more visually engaging — closer to the look of the reference clips? Walk me through the creative direction and then implement it.",
+      "expected_output": "A redesign that starts from the brief (objective/audience/focal point, deferring to story-craft), proposes a concrete premium look using the repo's vocabulary (gradients, 4-layer glow/glass, depth, restraint), and implements it frame-driven by reusing existing components/tokens — not a from-scratch reinvention. Should render and pass lint/typecheck.",
+      "files": [],
+      "expectations": [
+        "Establishes the brief/objective and names a per-beat focal point before choosing the look (references story-craft)",
+        "Animates strictly via useCurrentFrame() + interpolate()/spring() with no CSS animations, Tailwind animate-* classes, Reanimated useSharedValue, useFrame, or Date.now()",
+        "Reuses existing repo components and theme tokens (e.g. NeonPath/NeonStroke, Background, gradient.*, ease.out from tokens.ts) rather than reinventing the neon look",
+        "Applies premium-vocabulary principles deliberately (multi-stop gradients, glow/glass, depth layering, intentional easing, restrained on-screen text)",
+        "Verifies visually — renders a still (npx remotion still) and reports it, and runs npm run lint / npm run typecheck"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I want to add a new scene that shows a crypto-style animated price chart — a glowing line that draws on left-to-right with the value ticking up, like the charts reference clip. Build it.",
+      "expected_output": "A frame-driven Skia line-chart scene that reuses the gradient-line draw-on pattern (NeonStroke + NeonDot, paths via Skia.Path.MakeFromSVGString, draw-on via a 0->1 frame progress), on a dot-grid background, with data points blooming as the line reaches them. Correct engine choice (Skia) with no offline-render pitfalls.",
+      "files": [],
+      "expectations": [
+        "Chooses Skia (<SkiaCanvas>) for the line-art and justifies it over DOM/SVG or 3D",
+        "Reuses NeonStroke/NeonDot (or TimeSeriesCard) for the 4-layer glow instead of hand-rolling shadows, and builds paths with Skia.Path.MakeFromSVGString",
+        "Line draws on via a frame-driven 0->1 progress (e.g. useDrawProgress or interpolate on useCurrentFrame), house easing, clamped extrapolation",
+        "No forbidden patterns (no CSS/Tailwind animation, no Reanimated, no useFrame/clock, no Date.now); any random data uses a seeded PRNG",
+        "Renders a still at a mid-draw frame to verify the look and runs lint/typecheck"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Design a liquid-glass hero moment for a new product intro — a glass panel that refracts a colorful field behind it, in the style of the LiquidGlass reference. Give me the direction and the implementation approach.",
+      "expected_output": "A creative direction plus implementation that reuses the repo's real SKSL refraction (LiquidGlass useGlassPicture, wired like EngraStage), is picture-based (no per-frame offscreen surfaces) with the runtime effect compiled once, frame-driven, and stacks a backdrop field the glass refracts. Should correctly choose Skia imperative and flag the web/offline memory constraints.",
+      "files": [],
+      "expectations": [
+        "Chooses Skia imperative / SKSL and reuses LiquidGlass (useGlassPicture) wired like EngraStage rather than reinventing refraction",
+        "Uses the picture-based approach (picture.makeShader(), no per-frame offscreen surfaces or readPixels) and notes the RuntimeEffect is compiled once / cached",
+        "All glass parameters (strength, position, rim colors) derive from useCurrentFrame(); no clocks/CSS/Reanimated",
+        "Addresses the offline-render memory constraint (WASM heap bounded; no per-frame leaks) and that a runtime shader can't be a backdrop filter on web",
+        "Provides the brief/focal point first (story-craft) and verifies with a rendered still + lint/typecheck"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Build a cinematic 3D hero scene — a glowing neon object or constellation floating in space — and give it a real camera move: a slow push-in with a gentle orbit that settles, so it feels directed rather than static. Make it feel premium.",
+      "expected_output": "A frame-driven R3F (<ThreeCanvas>) scene with a cinematic camera rig: the camera position/lookAt/fov are driven by useCurrentFrame() (via useThree, with updateProjectionMatrix on fov changes), executing a motivated, eased push-in + orbit that settles. Reuses the VectorCloud3D neon recipe (additive meshBasicMaterial + toneMapped=false, seeded mulberry32), with no clock-based animation. Renders and passes lint/typecheck.",
+      "files": [],
+      "expectations": [
+        "Uses R3F <ThreeCanvas> from @remotion/three (correct engine for a 3D camera scene) and reuses the neon material recipe (additive meshBasicMaterial + toneMapped=false / VectorCloud3D pattern)",
+        "Implements a camera rig driven by useCurrentFrame() (grabs the camera via useThree, sets position/lookAt/fov, calls updateProjectionMatrix for fov) — NOT useFrame, THREE.Clock, or a static camera prop only",
+        "The camera move is motivated and cinematic (push-in and/or orbit), uses house easing with clamped extrapolation, and settles to rest rather than drifting forever",
+        "Strictly frame-driven and deterministic: no useFrame/clock/CSS/Reanimated/Date.now, and any randomness uses a seeded PRNG (mulberry32)",
+        "Names the brief/focal point (story-craft) and verifies visually — renders a still mid-move and runs npm run lint / npm run typecheck"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "There's a hard cut between two beats in one of our 9:16 videos and it feels abrupt. Add a nice transition between them — maybe a cross-dissolve, or a page-curl if that looks better.",
+      "expected_output": "Reuses the effects library's transition system rather than hand-rolling a crossfade: the self-contained <SceneTransition> + transitionProgress (driven from useCurrentFrame()) overlapped in the inter-scene pad so the audio-driven offsets[] timing is preserved, with a DOM presentation (crossDissolve) or the real SKSL <SkiaTransition> pageCurl for the curl. Frame-driven and offline-safe; should typecheck/lint.",
+      "files": [],
+      "expectations": [
+        "Reuses src/effects transitions (<SceneTransition> + transitionProgress, or <SkiaTransition> for a real curl) instead of hand-rolling an opacity crossfade",
+        "Preserves the audio-driven timeline — uses the self-contained SceneTransition overlapped in the inter-scene pad, not @remotion/transitions TransitionSeries (which shortens duration) for an existing audio-pad comp",
+        "Transition progress derives from useCurrentFrame() (via transitionProgress); no CSS transitions/animations, Reanimated, or clock",
+        "If a Skia shader transition is used, it follows offline rules (effect compiled once at module scope, picture/image sources, del() disposal) and notes shader-over-DOM isn't viable offline",
+        "Verifies — renders a still mid-transition and runs npm run lint / npm run typecheck"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Build me a quick title card: a headline that animates in cleanly over a moving colored background, in our brand colors. Keep it on-brand and premium.",
+      "expected_output": "An on-brand title card that reuses the effects library: a frame-driven entrance (RiseIn/FadeIn or useEnter, optionally Typewriter) for the headline over an AnimatedGradient or SdfFlow background, re-themed via a colors palette (defaulting to the neon palette), strictly frame-driven and restrained. Should render and pass lint/typecheck.",
+      "files": [],
+      "expectations": [
+        "Reuses src/effects text entrances (useEnter/RiseIn/FadeIn or Typewriter) instead of hand-rolling fade/translate interpolations",
+        "Reuses a library background (AnimatedGradient or SdfFlow) for the moving backdrop rather than reinventing a gradient animation",
+        "Themes via a colors palette (NEON_PALETTE default, or tokens) rather than hardcoding hexes; on-brand and restrained on-screen text",
+        "Strictly frame-driven via useCurrentFrame() — no CSS/Tailwind animation, Reanimated, useFrame/clock, or Date.now()",
+        "Verifies visually — renders a still and runs npm run lint / npm run typecheck"
+      ]
+    }
+  ]
+}

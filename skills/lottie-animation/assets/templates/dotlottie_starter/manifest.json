@@ -1,0 +1,21 @@
+{
+  "version": "2",
+  "generator": "lottie-animation-skill@1.0",
+  "initial": {
+    "stateMachine": "toggle"
+  },
+  "animations": [
+    {
+      "id": "indicator",
+      "initialTheme": "brand",
+      "themes": ["brand", "dark"]
+    }
+  ],
+  "themes": [
+    { "id": "brand", "name": "Anivect Brand" },
+    { "id": "dark",  "name": "Dark Mode" }
+  ],
+  "stateMachines": [
+    { "id": "toggle", "name": "On/Off Toggle" }
+  ]
+}

@@ -1,0 +1,17 @@
+[project]
+name = "__SERVICE__"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "common",
+    "uvicorn[standard]>=0.32",
+]
+
+# Resolve `common` from the workspace rather than PyPI. Workspace dependencies are
+# installed editable, so an edit in packages/common is live here with no reinstall.
+[tool.uv.sources]
+common = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.11.8,<0.12.0"]
+build-backend = "uv_build"

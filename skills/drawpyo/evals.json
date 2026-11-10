@@ -1,0 +1,20 @@
+{
+  "skill_name": "drawpyo",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm documenting our deployment pipeline. Make me a drawio flowchart with a Start terminator, a 'Run tests' process, a 'Tests pass?' decision branching Yes to a 'Deploy to prod' process and No back to a 'Notify team' step, ending at a terminator. Save it so I can open it in draw.io and tweak it.",
+      "expected_output": "A valid .drawio file using flowchart-library shapes (terminator, process, decision) with labeled Yes/No edges, opens in Draw.io."
+    },
+    {
+      "id": 2,
+      "prompt": "Turn this org structure into a tree diagram as a .drawio file: CEO over a CTO and a CFO; CTO over 'Platform' and 'Mobile'; CFO over 'Accounting'. Color it by depth.",
+      "expected_output": "A TreeDiagram built (ideally from_dict) with depth coloring, auto-laid-out, written to .drawio."
+    },
+    {
+      "id": 3,
+      "prompt": "I need a quick bar chart of quarterly signups (Q1 1200, Q2 1900, Q3 1500, Q4 2400) with a title and a y-axis, exported as a draw.io file I can drop into a deck.",
+      "expected_output": "A BarChart with show_axis and title, added to a page, written to .drawio."
+    }
+  ]
+}

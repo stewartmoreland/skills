@@ -1,0 +1,30 @@
+[project]
+name = "__APP__"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.14",
+    "asyncpg>=0.30",
+    "fastapi>=0.141",
+    "pydantic>=2.13",
+    "pydantic-settings>=2.6",
+    "sqlalchemy[asyncio]>=2.0.52",
+    "uvicorn[standard]>=0.32",
+]
+
+# An application, not a library: uv resolves and installs dependencies but builds
+# nothing. That is what lets src/ hold several sibling packages (common, routes,
+# access, schemas) instead of forcing them all under one package directory.
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "httpx>=0.28", "ruff>=0.8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+src = ["src"]
+line-length = 88

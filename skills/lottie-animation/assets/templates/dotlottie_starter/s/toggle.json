@@ -1,0 +1,54 @@
+{
+  "initial": "off",
+  "states": [
+    {
+      "name": "off",
+      "type": "PlaybackState",
+      "animation": "indicator",
+      "autoplay": true,
+      "loop": false,
+      "entryActions": [
+        { "type": "SetTheme", "value": "dark" }
+      ],
+      "transitions": [
+        {
+          "type": "Transition",
+          "toState": "on",
+          "guards": [
+            { "type": "Boolean", "inputName": "isOn", "conditionType": "Equal", "compareTo": true }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "on",
+      "type": "PlaybackState",
+      "animation": "indicator",
+      "autoplay": true,
+      "loop": true,
+      "entryActions": [
+        { "type": "SetTheme", "value": "brand" }
+      ],
+      "transitions": [
+        {
+          "type": "Transition",
+          "toState": "off",
+          "guards": [
+            { "type": "Boolean", "inputName": "isOn", "conditionType": "Equal", "compareTo": false }
+          ]
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "type": "Click",
+      "actions": [
+        { "type": "Toggle", "inputName": "isOn" }
+      ]
+    }
+  ],
+  "inputs": [
+    { "type": "Boolean", "name": "isOn", "value": false }
+  ]
+}

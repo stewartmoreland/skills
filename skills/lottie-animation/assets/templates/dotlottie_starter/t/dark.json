@@ -1,0 +1,14 @@
+{
+  "rules": [
+    {
+      "id": "primary_color",
+      "type": "Color",
+      "value": [0.93, 0.93, 0.96]
+    },
+    {
+      "id": "primary_opacity",
+      "type": "Scalar",
+      "value": 80
+    }
+  ]
+}
